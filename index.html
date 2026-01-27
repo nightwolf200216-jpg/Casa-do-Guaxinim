@@ -5,12 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RPG Character Vault - Gerencie Suas Fichas de Personagem</title>
     <link rel="stylesheet" href="css/style.css">
+    <!-- Novo: responsividade mobile -->
+    <link rel="stylesheet" href="css/responsive.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <body>
-    <img src="_github-pages-challenge-nightwolf200216-jpg" alt="Description">
+    <!-- Imagem removida/substituída: coloque assets/logo.png se quiser mostrar logo -->
+    <!-- <img src="assets/logo.png" alt="Casa do Guaxinim logo" style="display:none"> -->
+
     <!-- Navbar -->
     <nav class="navbar">
         <div class="navbar-container">
@@ -19,11 +23,11 @@
                 <span class="brand-name">Casa do Guaxinim</span>
             </div>
             <div class="navbar-menu">
-                <button class="btn-dice" id="rollDiceBtn" title="Rolar Dados">
+                <button class="btn-dice" id="rollDiceBtn" title="Rolar Dados" aria-label="Rolar dados">
                     <i class="fas fa-dice"></i>
                 </button>
-                <div class="user-profile-nav">
-                    <i class="fas fa-user-circle"></i>
+                <div class="user-profile-nav" role="button" tabindex="0" aria-label="Perfil do usuário">
+                    <i class="fas fa-user-circle" aria-hidden="true"></i>
                     <span id="userNameNav">Jogador</span>
                 </div>
             </div>
@@ -34,7 +38,7 @@
     <aside class="sidebar" id="sidebar">
         <div class="sidebar-header">
             <h3>Menu</h3>
-            <button class="sidebar-toggle" id="sidebarToggle">
+            <button class="sidebar-toggle" id="sidebarToggle" aria-label="Abrir menu">
                 <i class="fas fa-bars"></i>
             </button>
         </div>
@@ -71,7 +75,7 @@
         <!-- Dashboard Page -->
         <section class="page active" id="dashboard">
             <div class="page-header">
-                <h1><i class="fas fa-home"></i> Dashboard</h1>
+                <h1><i class="fas fa-home"></i> Painel</h1>
                 <p>Bem-vindo ao seu cofre de personagens de RPG</p>
             </div>
 
@@ -126,14 +130,14 @@
         <section class="page" id="my-characters">
             <div class="page-header">
                 <h1><i class="fas fa-users"></i> Minhas Fichas</h1>
-                <button class="btn btn-primary" onclick="navigateTo('create-character')">
+                <button class="btn btn-primary" onclick="navigateTo('create-character')" aria-label="Criar nova ficha">
                     <i class="fas fa-plus"></i> Nova Ficha
                 </button>
             </div>
 
             <div class="filters">
-                <input type="text" id="searchCharacters" placeholder="Buscar personagens..." class="search-input">
-                <select id="filterSystem" class="filter-select">
+                <input type="text" id="searchCharacters" placeholder="Buscar personagens..." class="search-input" aria-label="Buscar personagens">
+                <select id="filterSystem" class="filter-select" aria-label="Filtrar por sistema">
                     <option value="">Todos os Sistemas</option>
                     <option value="D&D 5e">D&D 5e</option>
                     <option value="Pathfinder">Pathfinder</option>
@@ -187,7 +191,7 @@
                     </div>
                     <h3>D&D 5e</h3>
                     <p>Dungeons & Dragons 5ª Edição</p>
-                    <button class="btn btn-secondary" onclick="useTemplate('dnd5e')">Usar Template</button>
+                    <button class="btn btn-secondary" onclick="useTemplate('dnd5e')" aria-label="Usar template D&D 5e">Usar Template</button>
                 </div>
                 <div class="template-card" data-template="pathfinder">
                     <div class="template-icon">
@@ -195,7 +199,7 @@
                     </div>
                     <h3>Pathfinder</h3>
                     <p>Pathfinder 2e</p>
-                    <button class="btn btn-secondary" onclick="useTemplate('pathfinder')">Usar Template</button>
+                    <button class="btn btn-secondary" onclick="useTemplate('pathfinder')" aria-label="Usar template Pathfinder">Usar Template</button>
                 </div>
                 <div class="template-card" data-template="cthulhu">
                     <div class="template-icon">
@@ -203,7 +207,7 @@
                     </div>
                     <h3>Call of Cthulhu</h3>
                     <p>Sistema de Horror Lovecraftiano</p>
-                    <button class="btn btn-secondary" onclick="useTemplate('cthulhu')">Usar Template</button>
+                    <button class="btn btn-secondary" onclick="useTemplate('cthulhu')" aria-label="Usar template Cthulhu">Usar Template</button>
                 </div>
                 <div class="template-card" data-template="generic">
                     <div class="template-icon">
@@ -211,7 +215,7 @@
                     </div>
                     <h3>Genérico</h3>
                     <p>Template básico personalizável</p>
-                    <button class="btn btn-secondary" onclick="useTemplate('generic')">Usar Template</button>
+                    <button class="btn btn-secondary" onclick="useTemplate('generic')" aria-label="Usar template genérico">Usar Template</button>
                 </div>
             </div>
         </section>
@@ -220,7 +224,7 @@
         <section class="page" id="notes">
             <div class="page-header">
                 <h1><i class="fas fa-scroll"></i> Anotações e Diário</h1>
-                <button class="btn btn-primary" onclick="createNewNote()">
+                <button class="btn btn-primary" onclick="createNewNote()" aria-label="Criar nova anotação">
                     <i class="fas fa-plus"></i> Nova Anotação
                 </button>
             </div>
@@ -244,17 +248,17 @@
                     <div class="profile-form">
                         <div class="form-group">
                             <label>Nome do Jogador</label>
-                            <input type="text" id="playerName" placeholder="Digite seu nome">
+                            <input type="text" id="playerName" placeholder="Digite seu nome" aria-label="Nome do jogador">
                         </div>
                         <div class="form-group">
                             <label>Bio</label>
-                            <textarea id="playerBio" placeholder="Conte-nos sobre você e suas aventuras de RPG..."></textarea>
+                            <textarea id="playerBio" placeholder="Conte-nos sobre você e suas aventuras de RPG..." aria-label="Bio do jogador"></textarea>
                         </div>
                         <div class="form-group">
                             <label>Sistemas Favoritos</label>
-                            <input type="text" id="favoriteSystems" placeholder="Ex: D&D 5e, Pathfinder, Call of Cthulhu">
+                            <input type="text" id="favoriteSystems" placeholder="Ex: D&D 5e, Pathfinder, Call of Cthulhu" aria-label="Sistemas favoritos">
                         </div>
-                        <button class="btn btn-primary" onclick="saveProfile()">
+                        <button class="btn btn-primary" onclick="saveProfile()" aria-label="Salvar perfil">
                             <i class="fas fa-save"></i> Salvar Perfil
                         </button>
                     </div>
@@ -288,7 +292,7 @@
         <div class="modal-content large">
             <div class="modal-header">
                 <h2><i class="fas fa-edit"></i> Editor de Ficha</h2>
-                <button class="modal-close" onclick="closeCharacterEditor()">&times;</button>
+                <button class="modal-close" onclick="closeCharacterEditor()" aria-label="Fechar editor">&times;</button>
             </div>
             <div class="modal-body">
                 <div class="editor-container">
@@ -322,7 +326,7 @@
                                 <option value="dice">Dado (d20, d6, etc)</option>
                             </select>
                             <input type="text" id="fieldName" placeholder="Nome do campo" class="form-control">
-                            <button class="btn btn-secondary" onclick="addCustomField()">
+                            <button class="btn btn-secondary" onclick="addCustomField()" aria-label="Adicionar campo">
                                 <i class="fas fa-plus"></i> Adicionar
                             </button>
                         </div>
@@ -352,8 +356,8 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-secondary" onclick="closeCharacterEditor()">Cancelar</button>
-                <button class="btn btn-primary" onclick="saveCharacter()">
+                <button class="btn btn-secondary" onclick="closeCharacterEditor()" aria-label="Cancelar edição">Cancelar</button>
+                <button class="btn btn-primary" onclick="saveCharacter()" aria-label="Salvar ficha">
                     <i class="fas fa-save"></i> Salvar Ficha
                 </button>
             </div>
@@ -366,13 +370,13 @@
             <div class="modal-header">
                 <h2 id="viewCharName">Personagem</h2>
                 <div class="modal-actions">
-                    <button class="btn btn-secondary btn-sm" onclick="editCharacter(currentViewingCharId)">
+                    <button class="btn btn-secondary btn-sm" onclick="editCharacter(currentViewingCharId)" aria-label="Editar ficha">
                         <i class="fas fa-edit"></i> Editar
                     </button>
-                    <button class="btn btn-primary btn-sm" onclick="exportToPDF(currentViewingCharId)">
+                    <button class="btn btn-primary btn-sm" onclick="exportToPDF(currentViewingCharId)" aria-label="Exportar PDF">
                         <i class="fas fa-file-pdf"></i> Exportar PDF
                     </button>
-                    <button class="modal-close" onclick="closeCharacterView()">&times;</button>
+                    <button class="modal-close" onclick="closeCharacterView()" aria-label="Fechar visualização">&times;</button>
                 </div>
             </div>
             <div class="modal-body">
@@ -383,7 +387,7 @@
                 <div class="character-notes-section">
                     <h3><i class="fas fa-scroll"></i> Anotações da Ficha</h3>
                     <textarea id="characterNotes" placeholder="Adicione anotações sobre este personagem..."></textarea>
-                    <button class="btn btn-secondary" onclick="saveCharacterNotes()">
+                    <button class="btn btn-secondary" onclick="saveCharacterNotes()" aria-label="Salvar anotações">
                         <i class="fas fa-save"></i> Salvar Anotações
                     </button>
                 </div>
@@ -396,17 +400,17 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h2><i class="fas fa-dice"></i> Rolador de Dados</h2>
-                <button class="modal-close" onclick="closeDiceRoller()">&times;</button>
+                <button class="modal-close" onclick="closeDiceRoller()" aria-label="Fechar rolador">&times;</button>
             </div>
             <div class="modal-body">
                 <div class="dice-buttons">
-                    <button class="dice-btn" onclick="rollDice(4)">d4</button>
-                    <button class="dice-btn" onclick="rollDice(6)">d6</button>
-                    <button class="dice-btn" onclick="rollDice(8)">d8</button>
-                    <button class="dice-btn" onclick="rollDice(10)">d10</button>
-                    <button class="dice-btn" onclick="rollDice(12)">d12</button>
-                    <button class="dice-btn" onclick="rollDice(20)">d20</button>
-                    <button class="dice-btn" onclick="rollDice(100)">d100</button>
+                    <button class="dice-btn" onclick="rollDice(4)" aria-label="Rolar d4">d4</button>
+                    <button class="dice-btn" onclick="rollDice(6)" aria-label="Rolar d6">d6</button>
+                    <button class="dice-btn" onclick="rollDice(8)" aria-label="Rolar d8">d8</button>
+                    <button class="dice-btn" onclick="rollDice(10)" aria-label="Rolar d10">d10</button>
+                    <button class="dice-btn" onclick="rollDice(12)" aria-label="Rolar d12">d12</button>
+                    <button class="dice-btn" onclick="rollDice(20)" aria-label="Rolar d20">d20</button>
+                    <button class="dice-btn" onclick="rollDice(100)" aria-label="Rolar d100">d100</button>
                 </div>
                 <div class="dice-result" id="diceResult">
                     <p>Clique em um dado para rolar</p>
@@ -424,7 +428,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h2><i class="fas fa-scroll"></i> Nova Anotação</h2>
-                <button class="modal-close" onclick="closeNoteModal()">&times;</button>
+                <button class="modal-close" onclick="closeNoteModal()" aria-label="Fechar anotação">&times;</button>
             </div>
             <div class="modal-body">
                 <div class="form-group">
@@ -453,8 +457,8 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-secondary" onclick="closeNoteModal()">Cancelar</button>
-                <button class="btn btn-primary" onclick="saveNote()">
+                <button class="btn btn-secondary" onclick="closeNoteModal()" aria-label="Cancelar anotação">Cancelar</button>
+                <button class="btn btn-primary" onclick="saveNote()" aria-label="Salvar anotação">
                     <i class="fas fa-save"></i> Salvar
                 </button>
             </div>
@@ -463,6 +467,9 @@
 
     <!-- File Upload Modal -->
     <input type="file" id="fileUploadInput" accept="image/*,.pdf" style="display:none" onchange="handleFileUpload(event)">
+
+    <!-- Responsiveness script (novo) -->
+    <script src="js/responsive.js"></script>
 
     <script src="js/app.js"></script>
     <script src="js/characters.js"></script>

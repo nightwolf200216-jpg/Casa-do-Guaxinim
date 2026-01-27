@@ -258,7 +258,7 @@ function createCharacterCard(char) {
 
     return `
         <div class="character-card" onclick="viewCharacter('${char.id}')">
-            <div class="character-header">
+            <div class="character-header" style="position:relative;">
                 <h3>${char.name}</h3>
                 <div class="character-meta">
                     <span><i class="fas fa-shield-alt"></i> ${char.class || 'N/A'}</span>
