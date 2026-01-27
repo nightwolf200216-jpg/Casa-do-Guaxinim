@@ -23,6 +23,7 @@
                 <span class="brand-name">Casa do Guaxinim</span>
             </div>
             <div class="navbar-menu">
+                <button class="sidebar-toggle" id="sidebarToggle" aria-label="Abrir menu"> <i class="fas fa-bars"></i> </button>
                 <button class="btn-dice" id="rollDiceBtn" title="Rolar Dados" aria-label="Rolar dados">
                     <i class="fas fa-dice"></i>
                 </button>
@@ -37,10 +38,7 @@
     <!-- Sidebar -->
     <aside class="sidebar" id="sidebar">
         <div class="sidebar-header">
-            <h3>Menu</h3>
-            <button class="sidebar-toggle" id="sidebarToggle" aria-label="Abrir menu">
-                <i class="fas fa-bars"></i>
-            </button>
+            
         </div>
         <ul class="sidebar-menu">
             <li class="active" data-page="dashboard">
@@ -64,6 +62,18 @@
                 <span>Anotações</span>
             </li>
             <li data-page="profile">
+                <button class="btn btn-secondary" id="exportCharsBtn" onclick="exportCharacters()" aria-label="Exportar fichas">
+  <i class="fas fa-file-export"></i> Exportar Fichas
+</button>
+<input type="file" id="importCharsInput" accept="application/json" style="display:none" onchange="handleImportChars(event)">
+<button class="btn btn-secondary" onclick="document.getElementById('importCharsInput').click()" aria-label="Importar fichas">
+  <i class="fas fa-file-import"></i> Importar Fichas
+</button>
+
+<!-- Link para a Mesa do Mestre -->
+<button class="btn btn-primary" onclick="navigateTo('mesa')" aria-label="Mesa do Mestre">
+  <i class="fas fa-chess-board"></i> Mesa do Mestre
+</button>
                 <i class="fas fa-user"></i>
                 <span>Perfil</span>
             </li>

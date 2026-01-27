@@ -1,6 +1,23 @@
 /* Responsividade e ajustes mobile (adicionar este arquivo e linkar no index.html) */
 
 /* Mostrar o botão de toggle e esconder a sidebar por padrão em telas pequenas */
+/* esconder toggle por padrão (desktop) */
+.sidebar-toggle { display: none; }
+
+/* mostrar toggle apenas no mobile (já existe um bloco @media; assegure que existe) */
+@media (max-width: 900px) {
+.sidebar-toggle {
+display: inline-flex;
+align-items: center;
+justify-content: center;
+background: none;
+border: none;
+color: var(--text-primary);
+font-size: 1.2rem;
+padding: 8px;
+}
+}
+.sidebar-toggle { display: none; }
 @media (max-width: 900px) {
   .sidebar {
     transform: translateX(-100%);
