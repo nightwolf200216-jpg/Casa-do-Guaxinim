@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RPG Character Vault - Gerencie Suas Fichas de Personagem</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+    <img src="_github-pages-challenge-nightwolf200216-jpg" alt="Description">
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <div class="navbar-brand">
+                <i class="fas fa-dice-d20"></i>
+                <span class="brand-name">Casa do Guaxinim</span>
+            </div>
+            <div class="navbar-menu">
+                <button class="btn-dice" id="rollDiceBtn" title="Rolar Dados">
+                    <i class="fas fa-dice"></i>
+                </button>
+                <div class="user-profile-nav">
+                    <i class="fas fa-user-circle"></i>
+                    <span id="userNameNav">Jogador</span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h3>Menu</h3>
+            <button class="sidebar-toggle" id="sidebarToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+        <ul class="sidebar-menu">
+            <li class="active" data-page="dashboard">
+                <i class="fas fa-home"></i>
+                <span>Painel</span>
+            </li>
+            <li data-page="my-characters">
+                <i class="fas fa-users"></i>
+                <span>Minhas Fichas</span>
+            </li>
+            <li data-page="create-character">
+                <i class="fas fa-plus-circle"></i>
+                <span>Criar Ficha</span>
+            </li>
+            <li data-page="templates">
+                <i class="fas fa-book"></i>
+                <span>Templates</span>
+            </li>
+            <li data-page="notes">
+                <i class="fas fa-scroll"></i>
+                <span>Anotações</span>
+            </li>
+            <li data-page="profile">
+                <i class="fas fa-user"></i>
+                <span>Perfil</span>
+            </li>
+        </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content" id="mainContent">
+        <!-- Dashboard Page -->
+        <section class="page active" id="dashboard">
+            <div class="page-header">
+                <h1><i class="fas fa-home"></i> Dashboard</h1>
+                <p>Bem-vindo ao seu cofre de personagens de RPG</p>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="totalCharacters">0</h3>
+                        <p>Personagens</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-scroll"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="totalNotes">0</h3>
+                        <p>Anotações</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-calendar"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="totalSessions">0</h3>
+                        <p>Sessões</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-book"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="totalSystems">0</h3>
+                        <p>Sistemas</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="recent-characters">
+                <h2><i class="fas fa-history"></i> Fichas Recentes</h2>
+                <div class="characters-grid" id="recentCharactersGrid">
+                    <!-- Characters will be loaded here -->
+                </div>
+            </div>
+        </section>
+
+        <!-- My Characters Page -->
+        <section class="page" id="my-characters">
+            <div class="page-header">
+                <h1><i class="fas fa-users"></i> Minhas Fichas</h1>
+                <button class="btn btn-primary" onclick="navigateTo('create-character')">
+                    <i class="fas fa-plus"></i> Nova Ficha
+                </button>
+            </div>
+
+            <div class="filters">
+                <input type="text" id="searchCharacters" placeholder="Buscar personagens..." class="search-input">
+                <select id="filterSystem" class="filter-select">
+                    <option value="">Todos os Sistemas</option>
+                    <option value="D&D 5e">D&D 5e</option>
+                    <option value="Pathfinder">Pathfinder</option>
+                    <option value="Call of Cthulhu">Call of Cthulhu</option>
+                    <option value="Custom">Personalizado</option>
+                </select>
+            </div>
+
+            <div class="characters-grid" id="allCharactersGrid">
+                <!-- All characters will be loaded here -->
+            </div>
+        </section>
+
+        <!-- Create Character Page -->
+        <section class="page" id="create-character">
+            <div class="page-header">
+                <h1><i class="fas fa-plus-circle"></i> Criar Nova Ficha</h1>
+                <p>Crie uma ficha totalmente personalizada para qualquer sistema de RPG</p>
+            </div>
+
+            <div class="create-options">
+                <div class="option-card" onclick="startCustomCharacter()">
+                    <i class="fas fa-wand-magic-sparkles"></i>
+                    <h3>Ficha Personalizada</h3>
+                    <p>Crie do zero com campos totalmente customizáveis</p>
+                </div>
+                <div class="option-card" onclick="navigateTo('templates')">
+                    <i class="fas fa-book"></i>
+                    <h3>Usar Template</h3>
+                    <p>Comece com um template de sistema popular</p>
+                </div>
+                <div class="option-card" onclick="uploadExternalSheet()">
+                    <i class="fas fa-upload"></i>
+                    <h3>Importar Ficha</h3>
+                    <p>Faça upload de uma ficha externa (PDF/Imagem)</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Templates Page -->
+        <section class="page" id="templates">
+            <div class="page-header">
+                <h1><i class="fas fa-book"></i> Templates de Sistemas</h1>
+                <p>Escolha um template pré-configurado para começar rapidamente</p>
+            </div>
+
+            <div class="templates-grid">
+                <div class="template-card" data-template="dnd5e">
+                    <div class="template-icon">
+                        <i class="fas fa-dragon"></i>
+                    </div>
+                    <h3>D&D 5e</h3>
+                    <p>Dungeons & Dragons 5ª Edição</p>
+                    <button class="btn btn-secondary" onclick="useTemplate('dnd5e')">Usar Template</button>
+                </div>
+                <div class="template-card" data-template="pathfinder">
+                    <div class="template-icon">
+                        <i class="fas fa-compass"></i>
+                    </div>
+                    <h3>Pathfinder</h3>
+                    <p>Pathfinder 2e</p>
+                    <button class="btn btn-secondary" onclick="useTemplate('pathfinder')">Usar Template</button>
+                </div>
+                <div class="template-card" data-template="cthulhu">
+                    <div class="template-icon">
+                        <i class="fas fa-skull"></i>
+                    </div>
+                    <h3>Call of Cthulhu</h3>
+                    <p>Sistema de Horror Lovecraftiano</p>
+                    <button class="btn btn-secondary" onclick="useTemplate('cthulhu')">Usar Template</button>
+                </div>
+                <div class="template-card" data-template="generic">
+                    <div class="template-icon">
+                        <i class="fas fa-dice-d20"></i>
+                    </div>
+                    <h3>Genérico</h3>
+                    <p>Template básico personalizável</p>
+                    <button class="btn btn-secondary" onclick="useTemplate('generic')">Usar Template</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Notes Page -->
+        <section class="page" id="notes">
+            <div class="page-header">
+                <h1><i class="fas fa-scroll"></i> Anotações e Diário</h1>
+                <button class="btn btn-primary" onclick="createNewNote()">
+                    <i class="fas fa-plus"></i> Nova Anotação
+                </button>
+            </div>
+
+            <div class="notes-container" id="notesContainer">
+                <!-- Notes will be loaded here -->
+            </div>
+        </section>
+
+        <!-- Profile Page -->
+        <section class="page" id="profile">
+            <div class="page-header">
+                <h1><i class="fas fa-user"></i> Meu Perfil</h1>
+            </div>
+
+            <div class="profile-container">
+                <div class="profile-card">
+                    <div class="profile-avatar">
+                        <i class="fas fa-user-circle"></i>
+                    </div>
+                    <div class="profile-form">
+                        <div class="form-group">
+                            <label>Nome do Jogador</label>
+                            <input type="text" id="playerName" placeholder="Digite seu nome">
+                        </div>
+                        <div class="form-group">
+                            <label>Bio</label>
+                            <textarea id="playerBio" placeholder="Conte-nos sobre você e suas aventuras de RPG..."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Sistemas Favoritos</label>
+                            <input type="text" id="favoriteSystems" placeholder="Ex: D&D 5e, Pathfinder, Call of Cthulhu">
+                        </div>
+                        <button class="btn btn-primary" onclick="saveProfile()">
+                            <i class="fas fa-save"></i> Salvar Perfil
+                        </button>
+                    </div>
+                </div>
+
+                <div class="profile-stats">
+                    <h2>Estatísticas</h2>
+                    <div class="stat-item">
+                        <span>Personagens Criados:</span>
+                        <strong id="profileCharacters">0</strong>
+                    </div>
+                    <div class="stat-item">
+                        <span>Anotações:</span>
+                        <strong id="profileNotes">0</strong>
+                    </div>
+                    <div class="stat-item">
+                        <span>Sessões Registradas:</span>
+                        <strong id="profileSessions">0</strong>
+                    </div>
+                    <div class="stat-item">
+                        <span>Membro desde:</span>
+                        <strong id="memberSince">-</strong>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Character Editor Modal -->
+    <div class="modal" id="characterEditorModal">
+        <div class="modal-content large">
+            <div class="modal-header">
+                <h2><i class="fas fa-edit"></i> Editor de Ficha</h2>
+                <button class="modal-close" onclick="closeCharacterEditor()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="editor-container">
+                    <!-- Left Panel: Field Editor -->
+                    <div class="editor-panel">
+                        <h3>Informações Básicas</h3>
+                        <div class="form-group">
+                            <label>Nome do Personagem *</label>
+                            <input type="text" id="charName" placeholder="Nome do personagem">
+                        </div>
+                        <div class="form-group">
+                            <label>Sistema de RPG *</label>
+                            <input type="text" id="charSystem" placeholder="Ex: D&D 5e, Pathfinder, Custom">
+                        </div>
+                        <div class="form-group">
+                            <label>Classe/Arquétipo</label>
+                            <input type="text" id="charClass" placeholder="Ex: Guerreiro, Mago, Investigador">
+                        </div>
+                        <div class="form-group">
+                            <label>Nível/Posto</label>
+                            <input type="text" id="charLevel" placeholder="Ex: 5, Iniciante, Veterano">
+                        </div>
+
+                        <h3>Adicionar Campos Personalizados</h3>
+                        <div class="field-creator">
+                            <select id="fieldType" class="form-control">
+                                <option value="text">Texto</option>
+                                <option value="number">Número</option>
+                                <option value="textarea">Texto Longo</option>
+                                <option value="checkbox">Checkbox</option>
+                                <option value="dice">Dado (d20, d6, etc)</option>
+                            </select>
+                            <input type="text" id="fieldName" placeholder="Nome do campo" class="form-control">
+                            <button class="btn btn-secondary" onclick="addCustomField()">
+                                <i class="fas fa-plus"></i> Adicionar
+                            </button>
+                        </div>
+
+                        <div class="custom-fields-list" id="customFieldsList">
+                            <!-- Custom fields will be added here -->
+                        </div>
+                    </div>
+
+                    <!-- Right Panel: Preview -->
+                    <div class="preview-panel">
+                        <h3>Preview da Ficha</h3>
+                        <div class="sheet-preview" id="sheetPreview">
+                            <div class="preview-basic-info">
+                                <h2 id="previewName">Nome do Personagem</h2>
+                                <div class="preview-meta">
+                                    <span id="previewClass">Classe</span> • 
+                                    <span id="previewLevel">Nível</span> • 
+                                    <span id="previewSystem">Sistema</span>
+                                </div>
+                            </div>
+                            <div class="preview-fields" id="previewFields">
+                                <!-- Fields preview will be shown here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeCharacterEditor()">Cancelar</button>
+                <button class="btn btn-primary" onclick="saveCharacter()">
+                    <i class="fas fa-save"></i> Salvar Ficha
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Character View Modal -->
+    <div class="modal" id="characterViewModal">
+        <div class="modal-content large">
+            <div class="modal-header">
+                <h2 id="viewCharName">Personagem</h2>
+                <div class="modal-actions">
+                    <button class="btn btn-secondary btn-sm" onclick="editCharacter(currentViewingCharId)">
+                        <i class="fas fa-edit"></i> Editar
+                    </button>
+                    <button class="btn btn-primary btn-sm" onclick="exportToPDF(currentViewingCharId)">
+                        <i class="fas fa-file-pdf"></i> Exportar PDF
+                    </button>
+                    <button class="modal-close" onclick="closeCharacterView()">&times;</button>
+                </div>
+            </div>
+            <div class="modal-body">
+                <div class="character-view-container" id="characterViewContent">
+                    <!-- Character content will be loaded here -->
+                </div>
+                
+                <div class="character-notes-section">
+                    <h3><i class="fas fa-scroll"></i> Anotações da Ficha</h3>
+                    <textarea id="characterNotes" placeholder="Adicione anotações sobre este personagem..."></textarea>
+                    <button class="btn btn-secondary" onclick="saveCharacterNotes()">
+                        <i class="fas fa-save"></i> Salvar Anotações
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dice Roller Modal -->
+    <div class="modal" id="diceRollerModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-dice"></i> Rolador de Dados</h2>
+                <button class="modal-close" onclick="closeDiceRoller()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="dice-buttons">
+                    <button class="dice-btn" onclick="rollDice(4)">d4</button>
+                    <button class="dice-btn" onclick="rollDice(6)">d6</button>
+                    <button class="dice-btn" onclick="rollDice(8)">d8</button>
+                    <button class="dice-btn" onclick="rollDice(10)">d10</button>
+                    <button class="dice-btn" onclick="rollDice(12)">d12</button>
+                    <button class="dice-btn" onclick="rollDice(20)">d20</button>
+                    <button class="dice-btn" onclick="rollDice(100)">d100</button>
+                </div>
+                <div class="dice-result" id="diceResult">
+                    <p>Clique em um dado para rolar</p>
+                </div>
+                <div class="dice-history" id="diceHistory">
+                    <h4>Histórico</h4>
+                    <ul id="diceHistoryList"></ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Note Modal -->
+    <div class="modal" id="noteModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-scroll"></i> Nova Anotação</h2>
+                <button class="modal-close" onclick="closeNoteModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Título</label>
+                    <input type="text" id="noteTitle" placeholder="Título da anotação">
+                </div>
+                <div class="form-group">
+                    <label>Tipo</label>
+                    <select id="noteType">
+                        <option value="session">Diário de Sessão</option>
+                        <option value="note">Anotação Geral</option>
+                        <option value="quest">Quest/Missão</option>
+                        <option value="npc">NPC</option>
+                        <option value="location">Local</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Conteúdo</label>
+                    <textarea id="noteContent" rows="10" placeholder="Escreva suas anotações aqui..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Associar à Ficha (Opcional)</label>
+                    <select id="noteCharacter">
+                        <option value="">Nenhuma</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeNoteModal()">Cancelar</button>
+                <button class="btn btn-primary" onclick="saveNote()">
+                    <i class="fas fa-save"></i> Salvar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- File Upload Modal -->
+    <input type="file" id="fileUploadInput" accept="image/*,.pdf" style="display:none" onchange="handleFileUpload(event)">
+
+    <script src="js/app.js"></script>
+    <script src="js/characters.js"></script>
+    <script src="js/templates.js"></script>
+    <script src="js/notes.js"></script>
+    <script src="js/dice.js"></script>
+    <script src="js/pdf.js"></script>
+</body>
+</html>
