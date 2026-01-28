@@ -20,77 +20,83 @@ function createNewNote() {
 // Open note modal
 function openNoteModal() {
     const modal = document.getElementById('noteModal');
-    modal.classList.add('active');
-    
-    // Populate character dropdown
+    if (!modal) return;
+
     const charSelect = document.getElementById('noteCharacter');
+    if (!charSelect) return;
+
+    modal.classList.add('active');
+
     charSelect.innerHTML = '<option value="">Nenhuma</option>';
-    
+
+    if (typeof AppState === 'undefined') return;
+
     AppState.characters.forEach(char => {
         const option = document.createElement('option');
         option.value = char.id;
         option.textContent = char.name;
         charSelect.appendChild(option);
     });
-    
-    // Set values if editing
+
     if (currentEditingNote) {
-        document.getElementById('noteTitle').value = currentEditingNote.title || '';
-        document.getElementById('noteType').value = currentEditingNote.type || 'note';
-        document.getElementById('noteContent').value = currentEditingNote.content || '';
+        document.getElementById('noteTitle')?.value = currentEditingNote.title || '';
+        document.getElementById('noteType')?.value = currentEditingNote.type || 'note';
+        document.getElementById('noteContent')?.value = currentEditingNote.content || '';
         charSelect.value = currentEditingNote.characterId || '';
     }
 }
-
 // Close note modal
 function closeNoteModal() {
     const modal = document.getElementById('noteModal');
+    if (!modal) return;
+
     modal.classList.remove('active');
     currentEditingNote = null;
 }
 
 // Save note
 function saveNote() {
-    const title = document.getElementById('noteTitle').value.trim();
-    const type = document.getElementById('noteType').value;
-    const content = document.getElementById('noteContent').value.trim();
-    const characterId = document.getElementById('noteCharacter').value || null;
-    
-    if (!title) {
-        showNotification('Título é obrigatório!', 'error');
+    if (!currentEditingNote || typeof AppState === 'undefined') return;
+
+    const titleEl = document.getElementById('noteTitle');
+    const contentEl = document.getElementById('noteContent');
+    const typeEl = document.getElementById('noteType');
+    const charEl = document.getElementById('noteCharacter');
+
+    if (!titleEl || !contentEl || !typeEl || !charEl) return;
+
+    const title = titleEl.value.trim();
+    const content = contentEl.value.trim();
+
+    if (!title || !content) {
+        if (typeof showNotification === 'function') {
+            showNotification('Título e conteúdo são obrigatórios!', 'error');
+        }
         return;
     }
-    
-    if (!content) {
-        showNotification('Conteúdo é obrigatório!', 'error');
-        return;
-    }
-    
+
     currentEditingNote.title = title;
-    currentEditingNote.type = type;
+    currentEditingNote.type = typeEl.value;
     currentEditingNote.content = content;
-    currentEditingNote.characterId = characterId;
+    currentEditingNote.characterId = charEl.value || null;
     currentEditingNote.updatedAt = new Date().toISOString();
-    
-    // Check if editing existing note
-    const existingIndex = AppState.notes.findIndex(n => n.id === currentEditingNote.id);
-    
-    if (existingIndex >= 0) {
-        AppState.notes[existingIndex] = currentEditingNote;
-        showNotification('Anotação atualizada com sucesso!', 'success');
-    } else {
-        AppState.notes.push(currentEditingNote);
-        showNotification('Anotação criada com sucesso!', 'success');
-    }
-    
-    saveNotesToStorage();
+
+    const index = AppState.notes.findIndex(n => n.id === currentEditingNote.id);
+
+    index >= 0
+        ? AppState.notes[index] = currentEditingNote
+        : AppState.notes.push(currentEditingNote);
+
+    saveNotesToStorage?.();
     closeNoteModal();
     displayNotes();
 }
 
+
 // Display notes
 function displayNotes() {
     const container = document.getElementById('notesContainer');
+    if (!container || typeof AppState === 'undefined') return;
     
     if (AppState.notes.length === 0) {
         container.innerHTML = `
@@ -117,8 +123,8 @@ function displayNotes() {
 // Create note card HTML
 function createNoteCard(note) {
     const date = new Date(note.updatedAt).toLocaleString('pt-BR');
-    const characterName = note.characterId ? 
-        AppState.characters.find(c => c.id === note.characterId)?.name || 'Personagem não encontrado' : 
+const characterName = note.characterId ? 
+    AppState.characters.find(c => c.id === note.characterId)?.name || 'Personagem não encontrado' : 
         'Geral';
     
     const typeLabels = {
@@ -311,7 +317,8 @@ function searchNotes(query) {
         note.content.toLowerCase().includes(query.toLowerCase())
     );
     
-    const container = document.getElementById('notesContainer');
+const container = document.getElementById('notesContainer');
+if (!container) return;
     
     if (filtered.length === 0) {
         container.innerHTML = `

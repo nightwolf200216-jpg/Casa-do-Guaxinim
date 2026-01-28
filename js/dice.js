@@ -5,6 +5,7 @@ let diceHistory = [];
 // Open dice roller
 function openDiceRoller() {
     const modal = document.getElementById('diceRollerModal');
+    if (!modal) return;
     modal.classList.add('active');
     displayDiceHistory();
 }
@@ -12,20 +13,18 @@ function openDiceRoller() {
 // Close dice roller
 function closeDiceRoller() {
     const modal = document.getElementById('diceRollerModal');
+    if (!modal) return;
     modal.classList.remove('active');
 }
-
 // Roll dice
 function rollDice(sides) {
-    const result = Math.floor(Math.random() * sides) + 1;
-    
-    // Display result with animation
     const resultDiv = document.getElementById('diceResult');
-    resultDiv.innerHTML = `
-        <p class="dice-rolling">🎲</p>
-    `;
-    
-    // Animate result
+    if (!resultDiv) return;
+
+    const result = Math.floor(Math.random() * sides) + 1;
+
+    resultDiv.innerHTML = `<p class="dice-rolling">🎲</p>`;
+
     setTimeout(() => {
         resultDiv.innerHTML = `
             <p style="animation: bounceIn 0.5s ease;">${result}</p>
@@ -33,22 +32,15 @@ function rollDice(sides) {
                 d${sides}
             </p>
         `;
-        
-        // Add to history
+
         diceHistory.unshift({
             dice: `d${sides}`,
-            result: result,
+            result,
             timestamp: new Date().toLocaleTimeString('pt-BR')
         });
-        
-        // Keep only last 20 rolls
-        if (diceHistory.length > 20) {
-            diceHistory = diceHistory.slice(0, 20);
-        }
-        
+
+        diceHistory = diceHistory.slice(0, 20);
         displayDiceHistory();
-        
-        // Play sound effect (optional)
         playDiceSound();
     }, 300);
 }
@@ -56,7 +48,7 @@ function rollDice(sides) {
 // Display dice history
 function displayDiceHistory() {
     const historyList = document.getElementById('diceHistoryList');
-    
+    if (!historyList) return;
     if (diceHistory.length === 0) {
         historyList.innerHTML = '<li style="text-align: center; color: var(--text-muted);">Nenhuma rolagem ainda</li>';
         return;
@@ -114,7 +106,8 @@ function rollWithAdvantage(sides = 20) {
     const roll2 = Math.floor(Math.random() * sides) + 1;
     const result = Math.max(roll1, roll2);
     
-    const resultDiv = document.getElementById('diceResult');
+ const resultDiv = document.getElementById('diceResult');
+if (!resultDiv) return;
     resultDiv.innerHTML = `
         <p style="animation: bounceIn 0.5s ease;">${result}</p>
         <p style="font-size: 0.9rem; margin-top: 0.5rem; color: var(--text-secondary);">
@@ -212,7 +205,8 @@ document.head.appendChild(diceStyle);
 document.addEventListener('DOMContentLoaded', () => {
     // Add keyboard shortcut for dice roller (Ctrl/Cmd + D)
     document.addEventListener('keydown', (e) => {
-        if ((e.ctrlKey || e.metaKey) && e.key === 'd') {
+        if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === 'D'
+) {
             e.preventDefault();
             openDiceRoller();
         }

@@ -24,7 +24,8 @@ function startCustomCharacter() {
 // Open character editor modal
 function openCharacterEditor() {
     const modal = document.getElementById('characterEditorModal');
-    modal.classList.add('active');
+if (!modal) return;
+modal.classList.add('active');
     
     // Reset form
     document.getElementById('charName').value = currentEditingChar.name || '';
@@ -48,7 +49,6 @@ function closeCharacterEditor() {
     const modal = document.getElementById('characterEditorModal');
     modal.classList.remove('active');
     currentEditingChar = null;
-    customFieldsCounter = 0;
 }
 
 // Add custom field
@@ -424,4 +424,39 @@ function handleFileUpload(event) {
     
     // Reset input
     event.target.value = '';
+}
+// Export characters to download JSON
+function exportCharacters() {
+  const data = JSON.stringify(AppState.characters || [], null, 2);
+  const blob = new Blob([data], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `characters-backup-${new Date().toISOString().slice(0,10)}.json`;
+  a.click();
+  URL.revokeObjectURL(a.href);
+  showNotification('Backup das fichas gerado para download', 'success');
+}
+
+// Handle import file input
+function handleImportChars(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      const parsed = JSON.parse(e.target.result);
+      if (!Array.isArray(parsed)) throw new Error('Formato inválido');
+      // opcional: mesclar sem duplicar ids
+      const existingIds = new Set(AppState.characters.map(c => c.id));
+      parsed.forEach(c => { if (!existingIds.has(c.id)) AppState.characters.push(c); });
+      saveCharactersToStorage();
+      displayAllCharacters();
+      showNotification('Fichas importadas com sucesso', 'success');
+    } catch (err) {
+      showNotification('Erro ao importar: arquivo inválido', 'error');
+    }
+  };
+  reader.readAsText(file);
+  // reset input
+  event.target.value = '';
 }
