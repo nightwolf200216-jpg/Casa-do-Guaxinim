@@ -1,3 +1,5 @@
+let sidebar;
+
 // Main App Controller
 // Initialize app state
 const AppState = {
@@ -8,7 +10,6 @@ const AppState = {
     editingCharacterId: null
 };
 
-// Initialize app on load
 document.addEventListener('DOMContentLoaded', () => {
     initializeApp();
     loadUserProfile();
@@ -17,7 +18,6 @@ document.addEventListener('DOMContentLoaded', () => {
     updateDashboard();
     setupEventListeners();
 });
-
 // Initialize app
 function initializeApp() {
     // Create default user if doesn't exist
@@ -46,54 +46,55 @@ function initializeApp() {
         localStorage.setItem('notes', JSON.stringify([]));
     }
 }
-
-// Setup event listeners
 function setupEventListeners() {
-    // Sidebar navigation
-    document.querySelectorAll('.sidebar-menu li').forEach(item => {
-        item.addEventListener('click', () => {
-            const page = item.getAttribute('data-page');
-            navigateTo(page);
-        });
-    });
-    
-    // Sidebar toggle for mobile
+    sidebar = document.getElementById('sidebar');
     const sidebarToggle = document.getElementById('sidebarToggle');
-    const sidebar = document.getElementById('sidebar');
+    const brand = document.querySelector('.navbar-brand');
+
+    function showSidebarMobile() {
+        if (!sidebar) return;
+        sidebar.classList.add('active');
+        document.body.classList.add('sidebar-open');
+
+        if (!document.getElementById('sidebarBackdrop')) {
+            const backdrop = document.createElement('div');
+            backdrop.id = 'sidebarBackdrop';
+            backdrop.style.cssText =
+              'position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:1050;';
+            backdrop.addEventListener('click', hideSidebarMobile);
+            document.body.appendChild(backdrop);
+        }
+    }
+
+    function hideSidebarMobile() {
+        if (!sidebar) return;
+        sidebar.classList.remove('active');
+        document.body.classList.remove('sidebar-open');
+        document.getElementById('sidebarBackdrop')?.remove();
+    }
+
     if (sidebarToggle) {
         sidebarToggle.addEventListener('click', () => {
-            sidebar.classList.toggle('active');
+            if (window.innerWidth <= 900) {
+                sidebar.classList.contains('active')
+                    ? hideSidebarMobile()
+                    : showSidebarMobile();
+            } else {
+                sidebar.classList.toggle('active');
+            }
         });
     }
-    
-    // Dice roller button
-    document.getElementById('rollDiceBtn').addEventListener('click', () => {
-        openDiceRoller();
-    });
-    
-    // Search characters
-    const searchInput = document.getElementById('searchCharacters');
-    if (searchInput) {
-        searchInput.addEventListener('input', (e) => {
-            filterCharacters(e.target.value);
+
+    if (brand) {
+        brand.addEventListener('click', (e) => {
+            e.preventDefault();
+            navigateTo('dashboard');
+
+            if (window.innerWidth <= 900) {
+                hideSidebarMobile();
+            }
         });
     }
-    
-    // Filter by system
-    const filterSystem = document.getElementById('filterSystem');
-    if (filterSystem) {
-        filterSystem.addEventListener('change', (e) => {
-            filterCharactersBySystem(e.target.value);
-        });
-    }
-    
-    // Real-time preview in character editor
-    ['charName', 'charClass', 'charLevel', 'charSystem'].forEach(id => {
-        const element = document.getElementById(id);
-        if (element) {
-            element.addEventListener('input', updateCharacterPreview);
-        }
-    });
 }
 
 // Navigation

@@ -1,7 +1,11 @@
-/* Responsividade e ajustes mobile (adicionar este arquivo e linkar no index.html) */
+/* ==============================
+   RESPONSIVE – MOBILE
+   ============================== */
 
-/* Mostrar o botão de toggle e esconder a sidebar por padrão em telas pequenas */
+/* MOBILE: até 900px */
 @media (max-width: 900px) {
+
+  /* Sidebar escondida por padrão */
   .sidebar {
     transform: translateX(-100%);
     position: fixed;
@@ -13,13 +17,13 @@
     transition: transform 0.28s ease;
   }
 
-  /* Quando ativa, a sidebar aparece */
+  /* Sidebar aberta */
   .sidebar.active {
     transform: translateX(0);
     box-shadow: var(--shadow-lg);
   }
 
-  /* Mostrar o botão de toggle no header */
+  /* Botão de toggle VISÍVEL */
   .sidebar-toggle {
     display: inline-flex;
     align-items: center;
@@ -27,9 +31,11 @@
     background: none;
     border: none;
     color: var(--text-primary);
+    font-size: 1.5rem;
+    cursor: pointer;
   }
 
-  /* O conteúdo principal ocupa toda largura quando a sidebar está escondida */
+  /* Conteúdo ocupa tela toda */
   .main-content {
     margin-left: 0;
     padding: 1rem;
@@ -39,65 +45,23 @@
     padding: 0 1rem;
   }
 
-  /* Ajustes para modais grandes em telas pequenas */
-  .modal-content.large {
-    max-width: 95%;
-    margin: 0 1rem;
-  }
-
-  /* Tornar grids mais verticalizados */
-  .characters-grid, .templates-grid, .create-options {
+  /* Grids em coluna */
+  .characters-grid,
+  .templates-grid,
+  .create-options {
     grid-template-columns: 1fr;
   }
 
-  /* Botões e alvos de toque maiores */
-  .btn, .btn-dice, .dice-btn, .btn-sm {
+  /* Botões maiores para touch */
+  .btn,
+  .btn-dice,
+  .dice-btn,
+  .btn-sm {
     min-height: 48px;
-    padding: 0.75rem 1rem;
-    font-size: 1rem;
   }
 
-  .btn-icon {
-    padding: 0.5rem;
-    min-width: 44px;
-    min-height: 44px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  /* Evitar overflow horizontal em elementos largos */
-  img, .sheet-preview, .character-card, .modal-content {
-    max-width: 100%;
-    box-sizing: border-box;
-  }
-
-  /* Evitar que o body role quando a sidebar estiver aberta */
+  /* Travar scroll quando sidebar aberta */
   body.sidebar-open {
     overflow: hidden;
   }
-}
-
-/* Pequenos ajustes globais para melhor touch/ACESSIBILIDADE */
-button, .btn, .btn-dice, .dice-btn {
-  touch-action: manipulation;
-  -webkit-tap-highlight-color: rgba(0,0,0,0.15);
-}
-.character-actions {
-  position: absolute;
-  right: 8px;
-  top: 8px;
-  z-index: 2;
-}
-.btn-icon.delete {
-  background: transparent;
-  border: none;
-  color: #c0392b;
-  font-size: 1rem;
-  padding: 6px;
-  cursor: pointer;
-}
-.btn-icon.delete:focus {
-  outline: 2px solid rgba(192,57,43,0.25);
-  border-radius: 4px;
 }
