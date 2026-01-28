@@ -1,8 +1,7 @@
-/* ==============================
+/* ============================== 
    RESPONSIVE – MOBILE
    ============================== */
 
-/* MOBILE: até 900px */
 @media (max-width: 900px) {
 
   /* Sidebar escondida por padrão */
@@ -15,6 +14,11 @@
     height: calc(100vh - var(--navbar-height));
     z-index: 1100;
     transition: transform 0.28s ease;
+
+    /* 🔥 CORREÇÕES IMPORTANTES */
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-bottom: 1rem;
   }
 
   /* Sidebar aberta */
@@ -23,7 +27,20 @@
     box-shadow: var(--shadow-lg);
   }
 
-  /* Botão de toggle VISÍVEL */
+  /* Itens da sidebar em coluna */
+  .sidebar-menu li {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  /* Botões ocupam largura total */
+  .sidebar .btn {
+    width: 100%;
+    white-space: normal;
+  }
+
+  /* Botão de toggle visível */
   .sidebar-toggle {
     display: inline-flex;
     align-items: center;
